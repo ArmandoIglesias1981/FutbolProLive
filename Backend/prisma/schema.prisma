@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model arbitro {
+  id_arbitro   Int      @id @default(autoincrement())
+  foto         String?
+  nombres      String
+  apellidos    String
+  documento    String   @unique
+  telefono     String?
+  correo       String?
+  nacionalidad String?
+  categoria    CategoriaArbitro
+  experiencia  Int?
+  activo       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  partido      partido[]
+}
+
+model categoria {
+  id_categoria Int      @id @default(autoincrement())
+  nombre       String   @db.VarChar(50)
+  descripcion  String?  @db.VarChar(200)
+  torneo       torneo[]
+}
+
+model equipo {
+  id_equipo         Int                @id @default(autoincrement())
+  nombre            String
+  ciudad            String?
+  director_tecnico  String?
+  fecha_registro    DateTime?          @default(now())
+  activo            Boolean            @default(true)
+  cel_tecnico       String?
+  correo_tecnico    String?
+  escudo            String?
+  id_tecnico        String?
+  presidente        String?
+  jugadores         jugador[]
+  partidosLocal     partido[]          @relation("partido_equipo_localToequipo")
+  partidosVisitante partido[]          @relation("partido_equipo_visitanteToequipo")
+  tabla_posiciones  tabla_posiciones[]
+}
+
+model estadio {
+  id_estadio          Int        @id @default(autoincrement())
+  nombre              String     @db.VarChar(150)
+  direccion           String?    @db.VarChar(200)
+  ciudad              String?    @db.VarChar(100)
+  capacidad           Int?
+
+  superficie          String?    @db.VarChar(50)
+  fecha_inauguracion  DateTime?
+  foto                String?
+  activo              Boolean    @default(true)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  partido             partido[]
+}
+
+model gol {
+  id_gol     Int      @id @default(autoincrement())
+  minuto     Int?
+  id_partido Int?
+  id_jugador Int?
+  jugador    jugador? @relation(fields: [id_jugador], references: [id_jugador], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_jugador")
+  partido    partido? @relation(fields: [id_partido], references: [id_partido], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_partido")
+}
+
+model jugador {
+  id_jugador       Int       @id @default(autoincrement())
+  nombres          String
+  apellidos        String
+  documento        String    @unique
+  fecha_nacimiento DateTime
+  posicion         Posicion
+  dorsal           Int
+  nacionalidad     String
+  activo           Boolean   @default(true)
+  id_equipo        Int
+  createdAt        DateTime  @default(now())
+  foto             String?
+  updatedAt        DateTime  @updatedAt
+  goles            gol[]
+  equipo           equipo    @relation(fields: [id_equipo], references: [id_equipo])
+  tarjetas         tarjeta[]
+}
+
+model partido {
+  id_partido                              Int       @id @default(autoincrement())
+  fecha                                   DateTime  @db.Timestamp(6)
+  id_torneo                               Int?
+  id_estadio                              Int?
+  id_arbitro                              Int?
+  equipo_local                            Int?
+  equipo_visitante                        Int?
+  goles_local                             Int?      @default(0)
+  goles_visitante                         Int?      @default(0)
+  estado                                  String?   @db.VarChar(20)
+  gol                                     gol[]
+  equipo_partido_equipo_localToequipo     equipo?   @relation("partido_equipo_localToequipo", fields: [equipo_local], references: [id_equipo], onDelete: NoAction, onUpdate: NoAction, map: "fk_local")
+  arbitro                                 arbitro?  @relation(fields: [id_arbitro], references: [id_arbitro], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_arbitro")
+  estadio                                 estadio?  @relation(fields: [id_estadio], references: [id_estadio], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_estadio")
+  torneo                                  torneo?   @relation(fields: [id_torneo], references: [id_torneo], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_torneo")
+  equipo_partido_equipo_visitanteToequipo equipo?   @relation("partido_equipo_visitanteToequipo", fields: [equipo_visitante], references: [id_equipo], onDelete: NoAction, onUpdate: NoAction, map: "fk_visitante")
+  tarjeta                                 tarjeta[]
+}
+
+model tabla_posiciones {
+  id_posicion      Int     @id @default(autoincrement())
+  id_torneo        Int?
+  id_equipo        Int?
+  partidos_jugados Int?    @default(0)
+  ganados          Int?    @default(0)
+  empatados        Int?    @default(0)
+  perdidos         Int?    @default(0)
+  goles_favor      Int?    @default(0)
+  goles_contra     Int?    @default(0)
+  diferencia_goles Int?    @default(0)
+  puntos           Int?    @default(0)
+  equipo           equipo? @relation(fields: [id_equipo], references: [id_equipo], onDelete: NoAction, onUpdate: NoAction, map: "fk_posicion_equipo")
+  torneo           torneo? @relation(fields: [id_torneo], references: [id_torneo], onDelete: NoAction, onUpdate: NoAction, map: "fk_posicion_torneo")
+}
+
+model tarjeta {
+  id_tarjeta Int      @id @default(autoincrement())
+  tipo       String   @db.VarChar(10)
+  minuto     Int?
+  id_partido Int?
+  id_jugador Int?
+  jugador    jugador? @relation(fields: [id_jugador], references: [id_jugador], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_jugador")
+  partido    partido? @relation(fields: [id_partido], references: [id_partido], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_partido")
+}
+
+model torneo {
+  id_torneo        Int                @id @default(autoincrement())
+  nombre           String             @db.VarChar(150)
+  fecha_inicio     DateTime           @db.Date
+  fecha_fin        DateTime?          @db.Date
+  estado           String?            @db.VarChar(20)
+  id_categoria     Int?
+  partido          partido[]
+  tabla_posiciones tabla_posiciones[]
+  categoria        categoria?         @relation(fields: [id_categoria], references: [id_categoria], onDelete: NoAction, onUpdate: NoAction, map: "fk_torneo_categoria")
+}
+
+model usuario {
+  id_usuario     Int       @id @default(autoincrement())
+  nombre         String    @db.VarChar(100)
+  apellido       String?   @db.VarChar(100)
+  correo         String    @unique @db.VarChar(150)
+  password       String    @db.VarChar(255)
+  rol            String    @db.VarChar(30)
+  fecha_creacion DateTime? @default(now()) @db.Timestamp(6)
+}
+
+enum Posicion {
+  PORTERO
+  DEFENSA
+  MEDIOCAMPISTA
+  DELANTERO
+}
+
+enum CategoriaArbitro {
+  MUNICIPAL
+  DEPARTAMENTAL
+  NACIONAL
+  FIFA
+}
