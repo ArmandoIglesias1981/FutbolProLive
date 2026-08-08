@@ -1,0 +1,33 @@
+# Node
+node_modules/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# NestJS
+backend/dist/
+
+# Variables de entorno
+frontend/.env
+frontend/.env.local
+backend/.env
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Prisma
+backend/prisma/dev.db
+
+# Cobertura
+coverage/
+
+# Archivos temporales
+*.tmp
