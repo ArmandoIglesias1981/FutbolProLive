@@ -71,18 +71,7 @@ export default function FormularioJugador({
   
 
 
-  useEffect(() => {
-    if (formulario.fecha_nacimiento) {
-      setEdad(
-        calcularEdad(
-          formulario.fecha_nacimiento
-        )
-      );
-    }
-  }, [formulario.fecha_nacimiento]);
-
-
-
+  
   function cambiarValor(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {

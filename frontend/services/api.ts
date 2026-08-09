@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:3001";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 
 
@@ -96,7 +97,7 @@ export async function actualizarEquipo(
   data: any
 ) {
   const response = await fetch(
-    `http://localhost:3001/equipos/${id}`,
+    `${API_URL}/equipos/${id}`,
     {
       method: "PATCH",
       headers: {

@@ -12,10 +12,7 @@ export default function BuscadorEquipos() {
     searchParams.get("buscar") ?? ""
   );
 
-  useEffect(() => {
-    setBuscar(searchParams.get("buscar") ?? "");
-  }, [searchParams]);
-
+  
   useEffect(() => {
 
     const timeout = setTimeout(() => {

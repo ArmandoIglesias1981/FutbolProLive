@@ -37,15 +37,13 @@ export default function EditarEquipoClient({
 
       router.refresh();
 
-    } catch (error: any) {
-
+    } catch (error) {
       console.error(error);
-
       alert(
-        error?.message ??
-        "Ocurrió un error al actualizar el equipo."
+        error instanceof Error
+        ? error.message
+      : "Ocurrió un error al actualizar el equipo."
       );
-
     } finally {
 
       setLoading(false);

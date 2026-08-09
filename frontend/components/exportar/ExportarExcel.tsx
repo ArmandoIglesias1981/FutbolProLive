@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 interface Props {
-  datos: any[];
+  datos: Record<string, unknown>[];
   nombreArchivo: string;
 }
 

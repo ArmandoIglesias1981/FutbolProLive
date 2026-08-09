@@ -26,13 +26,14 @@ export default function NuevoEquipo() {
 
       router.refresh();
 
-    } catch (error: any) {
+    } catch (error) {
 
       console.error(error);
 
       alert(
-        error?.message ??
-        "Ocurrió un error al guardar el equipo."
+        error instanceof Error
+      ? error.message
+        : "Ocurrió un error al guardar el equipo."
       );
 
     } finally {
