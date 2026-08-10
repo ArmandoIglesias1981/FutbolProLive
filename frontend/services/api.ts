@@ -1,6 +1,6 @@
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://futbolprolive-api.onrender.com";
+  "https://futbolprolive-backend.onrender.com";
 
 
 

@@ -1,6 +1,10 @@
-const API_URL = "http://localhost:3001";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://futbolprolive-backend.onrender.com";
 
-export async function subirImagen(file: File): Promise<string> {
+export async function subirImagen(
+  file: File
+): Promise<string> {
   const formData = new FormData();
 
   formData.append("file", file);
