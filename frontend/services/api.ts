@@ -35,8 +35,19 @@ export async function obtenerEquipos(
     }
   );
 
+  
   if (!response.ok) {
-    throw new Error("Error al cargar equipos");
+    const texto = await response.text();
+
+    console.error(
+      "ERROR EQUIPOS:",
+      response.status,
+      texto
+    );
+
+    throw new Error(
+      `Error equipos: ${response.status}`
+    );
   }
 
   return response.json();
@@ -49,9 +60,21 @@ export async function obtenerEquipo(id: number) {
     cache: "no-store",
   });
 
+  
   if (!response.ok) {
-    throw new Error("Error al obtener el equipo");
+    const texto = await response.text();
+
+    console.error(
+      "ERROR JUGADORES:",
+      response.status,
+      texto
+    );
+
+    throw new Error(
+      `Error jugadores: ${response.status}`
+    );
   }
+
 
   return response.json();
 }
