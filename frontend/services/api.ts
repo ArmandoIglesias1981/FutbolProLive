@@ -39,11 +39,12 @@ export async function obtenerEquipos(
   if (!response.ok) {
     const texto = await response.text();
 
-    console.error(
-      "ERROR EQUIPOS:",
-      response.status,
-      texto
-    );
+    console.error("===== ERROR API EQUIPOS =====");
+    console.error("API_URL:", API_URL);
+    console.error("URL SOLICITADA:", response.url);
+    console.error("STATUS:", response.status);
+    console.error("RESPUESTA:", texto);
+    console.error("=============================");
 
     throw new Error(
       `Error equipos: ${response.status}`
