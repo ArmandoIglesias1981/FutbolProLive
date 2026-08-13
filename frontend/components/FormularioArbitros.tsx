@@ -97,6 +97,7 @@ export default function FormularioArbitros({
 
     try {
       const url = await subirImagen(archivo);
+      console.log("URL DE CLOUDINARY:", url);
 
       setForm((prev) => ({
         ...prev,
