@@ -2,9 +2,7 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://futbolprolive-api.onrender.com";
 
-export async function subirImagen(
-  file: File
-): Promise<string> {
+export async function subirImagen(file: File): Promise<string> {
   const formData = new FormData();
 
   formData.append("file", file);

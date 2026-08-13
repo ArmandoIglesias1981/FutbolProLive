@@ -71,21 +71,29 @@ export default function FormularioArbitros({
   ) {
     e.preventDefault();
 
-    if (form.id_arbitro) {
-      await actualizarArbitro(
-        form.id_arbitro,
-        form
-      );
-    } else {
-      await crearArbitro(form);
+    try {
+      console.log("DATOS A GUARDAR:", form);
+
+      if (form.id_arbitro) {
+        const respuesta = await actualizarArbitro(
+          form.id_arbitro,
+          form
+        );
+
+        console.log("RESPUESTA ACTUALIZAR:", respuesta);
+      } else {
+        const respuesta = await crearArbitro(form);
+
+        console.log("RESPUESTA CREAR:", respuesta);
+      }
+
+      router.push("/arbitros");
+      router.refresh();
+
+    } catch (error) {
+      console.error("ERROR AL GUARDAR ÁRBITRO:", error);
+      alert("No fue posible guardar el árbitro.");
     }
-
-    router.push("/arbitros");
-    router.refresh();
-  }
-
-  function cancelar() {
-    router.push("/arbitros");
   }
 
   async function subirFoto(
@@ -134,13 +142,13 @@ export default function FormularioArbitros({
           />
 
           {form.foto && (
-
-            <img
-              src={form.foto}
-              alt="Foto"
-              className="w-32 h-32 rounded-full border object-cover shadow"
-            />
-
+            <div className="w-32 h-32 rounded-full border-2 overflow-hidden shadow">
+              <img
+                src={form.foto}
+                alt="Foto del árbitro"
+                className="w-full h-full object-cover"
+              />
+            </div>
           )}
 
         </div>
