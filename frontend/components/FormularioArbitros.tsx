@@ -8,6 +8,8 @@ import {
   actualizarArbitro,
 } from "@/services/api";
 
+import { subirImagen } from "@/services/upload";
+
 interface Arbitro {
   id_arbitro?: number;
   foto?: string;
@@ -89,30 +91,21 @@ export default function FormularioArbitros({
   async function subirFoto(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
+    const archivo = e.target.files?.[0];
 
-    if (!e.target.files?.length) return;
+    if (!archivo) return;
 
-    const data = new FormData();
+    try {
+      const url = await subirImagen(archivo);
 
-    data.append(
-      "file",
-      e.target.files[0]
-    );
-
-    const res = await fetch(
-      "http://localhost:3001/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-
-    const archivo = await res.json();
-
-    setForm({
-      ...form,
-      foto: archivo.url,
-    });
+      setForm((prev) => ({
+        ...prev,
+        foto: url,
+      }));
+    } catch (error) {
+      console.error("Error al subir foto:", error);
+      alert("Error al subir la foto del árbitro.");
+    }
   }
 
   return (

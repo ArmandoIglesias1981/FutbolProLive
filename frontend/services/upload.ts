@@ -1,6 +1,6 @@
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://futbolprolive-backend.onrender.com";
+  "https://futbolprolive-api.onrender.com";
 
 export async function subirImagen(
   file: File
