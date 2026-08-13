@@ -96,6 +96,10 @@ export default function FormularioArbitros({
     }
   }
 
+  function cancelar() {
+    router.push("/arbitros");
+  }
+
   async function subirFoto(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
